@@ -1,2 +1,2 @@
-# Data-Mining
+# Data Mining
 course work 
