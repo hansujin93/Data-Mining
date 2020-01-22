@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-
+from scipy.spatial.distance import cdist
+import numpy as np
 
 ## 1. KNN ##
 def knn_predict(train_x, train_y, test, k):
@@ -15,3 +16,7 @@ def knn_predict(train_x, train_y, test, k):
         values, count = np.unique(freq_label, return_counts=True)
         pred.append(values[np.argmax(count)])  # predict test[i] for the frequent label in freq_label
     return pred
+
+
+
+## 2. Decision Tree ##
