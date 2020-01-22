@@ -52,3 +52,60 @@ X_train, X_valid, y_train, y_valid = train_test_split(data_x, data_y, test_size=
 model = RandomForestClassifier(random_state=0).fit(X_train, y_train)
 perm = PermutationImportance(model, random_state=1).fit(X_valid, y_valid)
 eli5.show_weights(perm)
+
+
+
+## Standardisation ##
+def standard(data):
+    standardised_data = data.copy()
+
+    rows = data.shape[0]
+    cols = data.shape[1]
+
+    for j in range(cols):
+        sigma = np.std(data[:,j])
+        mu = np.mean(data[:,j])
+        for i in range(rows):
+            standardised_data[i,j] = (data[i,j] - mu) / sigma
+    return standardised_data
+
+## PCA ##
+from sklearn.decomposition import PCA
+
+def centralize(data):
+    centralized_data = data.copy()
+    rows = data.shape[0]
+    cols = data.shape[1]
+
+    for j in range(cols):
+        mu = np.mean(data[:,j])
+
+        for i in range(rows):
+            centralized_data[i,j] = (data[i,j]-mu)
+    return centralized_data
+
+
+pca = PCA(n_components=2)
+transformed_data_x = pca.fit_transform(x)
+coeff = pca.components_
+
+# visualise data distribution after PCA
+plt.figure(figsize = (6,4))
+plt.plot(transformed_data_x[:,0],transformed_data_x[:,1],".", color='black')
+plt.xlabel("1st Principal Component")
+plt.ylabel("2nd Principal Component")
+
+# variance by a principal component1,2 by rate(%)
+fig, ax = plt.subplots()
+label_pc = ['PC1','PC2']
+pos_pc = np.arange(len(label_pc))
+value_2 = [round(pca.explained_variance_ratio_[0]*100,2),round(pca.explained_variance_ratio_[1]*100,2)]
+
+bar_plot_pc = plt.bar(pos_pc, value_2, color='gray')
+plt.xticks(pos_pc, label_pc)
+plt.xlabel('Principal Component', fontsize=13)
+plt.ylabel('Variance Explained (%)', fontsize=13)
+plt.title('Variance by a principal component in %',fontsize=13)
+autolabel(bar_plot_pc, value_2)
+plt.ylim(0,100)
+plt.show()
