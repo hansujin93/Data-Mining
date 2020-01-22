@@ -69,6 +69,8 @@ def standard(data):
             standardised_data[i,j] = (data[i,j] - mu) / sigma
     return standardised_data
 
+
+
 ## PCA ##
 from sklearn.decomposition import PCA
 
