@@ -41,7 +41,6 @@ def corr_matrix(data):
     corr_m = pd.DataFrame(corr_m)
     return corr_m
 
-
 ''' 2) permutation based '''
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
@@ -85,7 +84,6 @@ def centralize(data):
         for i in range(rows):
             centralized_data[i,j] = (data[i,j]-mu)
     return centralized_data
-
 
 pca = PCA(n_components=2)
 transformed_data_x = pca.fit_transform(x)
