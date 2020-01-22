@@ -1,4 +1,5 @@
 ''' Load Data '''
+import numpy as np
 
 dataRaw = []
 DataFile = open("HTRU_2.csv", "r")
