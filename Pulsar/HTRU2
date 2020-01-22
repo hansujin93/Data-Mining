@@ -1,0 +1,20 @@
+''' Load Data '''
+
+dataRaw = []
+DataFile = open("HTRU_2.csv", "r")
+
+while True:
+    theline=DataFile.readline()
+    if len(theline)==0:
+        break
+    readData=theline.split(",")
+    for pos in range(len(readData)):
+        readData[pos] = float(readData[pos]);
+    dataRaw.append(readData)
+DataFile.close()
+data=np.array(dataRaw)
+
+data_x = np.delete(data, 8, 1)
+def extract_column(array, i):
+    return [row[i] for row in array]
+data_y = extract_column(data, 8)
