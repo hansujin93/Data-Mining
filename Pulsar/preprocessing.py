@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
 ''' correlation matrix '''
-
+import numpy as np
+import math
+import pandas as pd
 
 def mean_func(data_array):
     total = 0
