@@ -1,0 +1,26 @@
+''' Load Data '''
+import numpy as np
+
+labelsRaw = []
+dataRaw = []
+labelsRaw = []
+DataFile = open("agaricus-lepiota.data", "r")
+while True:
+    theline = DataFile.readline()
+    if len(theline) == 0:
+        break
+    theline = theline.rstrip()
+    readData = theline.split(",")
+
+    for pos in range(len(readData)):
+        if (readData[pos] == "?"):
+            readData[pos] = float("NaN")
+    dataRaw.append(readData[1:])
+    if (readData[0] == 'p'):
+        labelsRaw.append(1)
+    if (readData[0] == 'e'):
+        labelsRaw.append(0)
+
+DataFile.close ()
+x = np.array(dataRaw)
+y = np.array(labelsRaw)
