@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-
-## Feature Selection ##
-''' 1) correlation based '''
 import numpy as np
 import math
 import pandas as pd
 
+## Feature Selection ##
+''' 1) correlation based '''
 def mean_func(data_array):
     total = 0
     for i in data_array:
