@@ -1,4 +1,16 @@
 # -*- coding: utf-8 -*-
+import numpy as np
+from scipy import linalg
+import matplotlib.pyplot as plt
+
+def dist_one_pair(arr1, arr2):
+    sum = 0
+    for i in range(len(arr1)):
+        sum += (arr1[i]-arr2[i])**2
+    sum = math.sqrt(sum)
+    return sum
+
+
 
 ## 1. LDA ##
 def meanfeatures(data):
@@ -142,3 +154,67 @@ def lda_predict(xtrain, ytrain, xtest, k):
             pred.append(1)
 
     return pred
+
+
+
+## 2. Logistic Regression ##
+class MyLogisticRegression():
+    def __init__(self, W=None, b=None, random_state=None, epoch=100, lr=0.001, threshold=0.5):
+        self.random_state = random_state
+        self.epoch = epoch  
+        self.lr = lr
+        self.threshold = threshold
+        self._W = W
+        self._b = b
+
+    def _sigmoid(self, t):  # For private usage, _sigmoid
+        return 1/(1+np.exp(-t))
+
+    def _loss(self, p, y):  # For private usage, _loss
+        return np.sum(np.power(p-y,2))  # p: value after sigmoid / x: label of item x
+
+    def fit(self,X,y):
+        # For initialising W(weight), b(intercept),
+        # if initial W is defined too big, output before activation(sigmoid) gets big, resulting in very small activation function slope close to 0 so it makes training speed slow.
+        # Therefore, multiply 0.01 from some random values between 0 and 1 to make initial parameters small enough.
+        # For constant value b, initialise as 0
+        #################   parameter(W,b) initialisation   #################
+        self._W = np.random.uniform(0,1,size=(X.shape[1],1)) * 0.01
+        # For parameter t in sigmoid(t), t = np.dot(X,W)+ b. So, column number of X(number of features) = row number of W.
+        self._b = 0
+        #################   model training(for each epoch)   #################
+        for i in range(self.epoch):
+            xy = np.concatenate((X, y), axis = 1) # merge X, y to shuffle randomly as a whole
+            # Order items randomly
+            np.random.shuffle(xy)
+            # Split X, y again based on shuffled data
+            X = xy[:, :X.shape[1]]
+            y = xy[:,X.shape[1]].reshape(len(xy[:,X.shape[1]]),1)        # reshape to make (n,) -> (n,1)
+            # For each item x,
+            for j in range(X.shape[0]):
+                # Firstly, calculate sigmoid output for each item
+                t = np.dot(X, self._W) + self._b # [number of data, 1]
+                sig = self._sigmoid(t)  # [number of data, 1]
+                grad = (sig - y) * sig * (1 - sig)  # [number of data, 1]
+                # update W, b
+                for k in range(X.shape[1]):
+                    self._W[k] = self._W[k] - self.lr * grad[j] * X[j, k]
+            self._b = self._b - self.lr * grad[j]
+            
+            ########## This is to check whether error gets lower after each epoch ##########
+            sig_total = self._sigmoid(np.dot(X, self._W) + self._b)
+            # calculate error
+            error = self._loss(sig_total, y)
+
+    def predict_probability(self, Xtest):
+        prob = self._sigmoid(np.dot(Xtest, self._W) + self._b)
+        return prob
+
+    def predict(self, Xtest):
+        pred = []
+        for i in self._sigmoid(np.dot(Xtest, self._W) + self._b):
+            if i > self.threshold:
+                pred.append(1)
+            else:
+                pred.append(0)
+        return pred
