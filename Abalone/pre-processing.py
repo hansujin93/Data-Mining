@@ -12,7 +12,7 @@ def multiple(l,n):
     k = np.array(k)
     return k
 
-def onehot_encode(data, which_column):   # which_column = 0(sex) in this case
+def onehot_encode(data, which_column): 
     l = []
     newdata = data.copy()
     for i in range(len(data)):
@@ -23,8 +23,8 @@ def onehot_encode(data, which_column):   # which_column = 0(sex) in this case
         for idx in range(len(uniq)):
             if l[p] == uniq[idx]:
                 new[p][idx] = 1
-    newdata = np.delete(newdata, which_column, 1) # delete the categorical column
-    newdata = np.concatenate((newdata, new), axis = 1) # merge column
+    newdata = np.delete(newdata, which_column, 1) 
+    newdata = np.concatenate((newdata, new), axis = 1) 
     return newdata
 
 
@@ -65,14 +65,14 @@ def undersample(x, y, k, l):
     labelLPositions = []
     for rowPos in range(len(data)):
         if (y[rowPos] == l):
-            labelLPositions.append(rowPos)                 # store data where class = 'l'
-    toEliminate = random.sample(labelLPositions, k)        # extract random k values from labelLPositions
+            labelLPositions.append(rowPos)                 
+    toEliminate = random.sample(labelLPositions, k)       
     for rowPos in range(len(data)):
         if (rowPos not in toEliminate):
             if (len(newData) == 0):
                 newData = data[rowPos, :].copy()
             else:
-                newData = np.vstack((newData, data[rowPos, :]))   # stack to newData which is not selected in eliminate list
+                newData = np.vstack((newData, data[rowPos, :]))  
     x = newData[:,:10]    # since 10th is response variabel
     y = newData[:,10]
     y = y.reshape(len(y),1)
@@ -136,18 +136,13 @@ def smote(x, y, n, l, k, except_column_list):   # k: number of neighbours that w
         # print("random_j as ", random_j)
         alpha = np.random.random()
         fake_sample = get_between_point(random_j, p, alpha)
-        # print('before revise 7,8,9 ', fake_sample)
-        # this is for making fake samples of binary expression (it should not be substituted into decimal point. Rather, it should be either 0 or 1 based on alpha)
-        # consider alpha as a probability to be close to random_j
         for ec in except_column_list:
             if alpha >= 0.5:
-                fake_sample[ec] = random_j[ec]    # if alpha>=0.5, it means that the point is closer to random_j, so get the binary expression of random_j
+                fake_sample[ec] = random_j[ec]   
             else:
-                fake_sample[ec] = p[ec]           # vice versa
+                fake_sample[ec] = p[ec]          
         # print('after revise 7,8,9 ', fake_sample)
         fake_samples.append(fake_sample)
-        # print("---------fake sample is", fake_sample)
-    # append label to label_data by amount of created fake samples
     label_data = label_data.reshape(len(label_data),1)
     sample_label = np.array([l]*len(fake_samples))
     sample_label = sample_label.reshape(len(sample_label),1)
