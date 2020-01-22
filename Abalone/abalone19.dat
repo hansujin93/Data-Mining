@@ -1,0 +1,25 @@
+''' Load Data '''
+
+labelsRaw = []
+dataRaw = []
+labelsRaw = []
+DataFile = open("abalone19.dat", "r")
+while True:
+    theline = DataFile.readline()
+    if len(theline) == 0:
+        break
+    theline = theline.rstrip()
+    readData = theline.split(",")
+
+    if len(readData) < 9:
+        pass
+    else:
+        dataRaw.append(readData[0:8])
+
+        if (readData[8] == 'negative'):
+            labelsRaw.append(0)
+        if ('positive' in readData[8] ):   # Since there exist both ' positive' and 'positive'
+            labelsRaw.append(1)
+DataFile.close ()
+x = np.array(dataRaw)
+y = np.array(labelsRaw)
