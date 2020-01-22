@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import numpy as np
+
 
 ## 1. Hierarchical clustering ##
 def dist_one_pair(arr1, arr2):
@@ -7,7 +9,6 @@ def dist_one_pair(arr1, arr2):
         sum += (arr1[i]-arr2[i])**2
     sum = math.sqrt(sum)
     return sum
-
 
 def euc_distance(data):
     data = np.array(data)
