@@ -90,6 +90,7 @@ transformed_data_x = pca.fit_transform(x)
 coeff = pca.components_
 
 # visualise data distribution after PCA
+import matplotlib.pyplot as plt
 plt.figure(figsize = (6,4))
 plt.plot(transformed_data_x[:,0],transformed_data_x[:,1],".", color='black')
 plt.xlabel("1st Principal Component")
